@@ -1,0 +1,13 @@
+{
+  "user": {
+    "6a601f0f-a663-47b4-a57e-8d434bed2e87": {
+      "id": "6a601f0f-a663-47b4-a57e-8d434bed2e87",
+      "secret": {
+        "ascii": "iDQu2eh<IsWeXcA>mhn0[5U.@o?ZCt(F",
+        "hex": "694451753265683c497357655863413e6d686e305b35552e406f3f5a43742846",
+        "base32": "NFCFC5JSMVUDYSLTK5SVQY2BHZWWQ3RQLM2VKLSAN47VUQ3UFBDA",
+        "otpauth_url": "otpauth://totp/SecretKey?secret=NFCFC5JSMVUDYSLTK5SVQY2BHZWWQ3RQLM2VKLSAN47VUQ3UFBDA"
+      }
+    }
+  }
+}

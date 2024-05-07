@@ -18,7 +18,7 @@ const app: Express = express();
 const port = process.env.PORT;
 app.set("view engine", "ejs");
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: true, credentials: true }));
 const client = new MongoClient(process.env.MONGO_ATLAS_URL);
 
 const mongoURI = process.env.MONGO_ATLAS_URL;
@@ -34,17 +34,16 @@ const secret = generateSecret();
 app.use(
   session({
     secret,
-    resave: false,
-    saveUninitialized: true,
     store: sessionStore,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
-      secure: false, // Set to true for HTTPS environments
-      sameSite: "strict",
     },
+    secure: true, // Set to true for HTTPS environments
+    sameSite: "None",
+    resave: false,
+    saveUninitialized: false,
   })
 );
-let sessionMail = "";
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   if (req.session && req.session.user) {
@@ -87,24 +86,24 @@ app.post("/api/login", async (req: Request, res: Response) => {
     if (user) {
       if (await bcrypt.compare(password, user.password)) {
         req.session.email = email;
-        req.session.save((err: any) => {
+        await req.session.save((err: any) => {
           if (err) {
             console.log(err);
-          } else {
-            console.log("Session saved success: ", req.session.email);
-            sessionMail = req.session.email;
           }
         });
         col.updateOne(
           { email },
           {
             $push: {
-              login_info: getDetails(req, res),
+              login_info: {
+                $each: [getDetails(req, res)],
+                $position: 0,
+              },
             },
           }
         );
+
         res.json({ message: true });
-        console.log("At Login: ", getDetails(req, res));
       } else {
         res.json({ message: false });
       }
@@ -123,10 +122,9 @@ app.get("/api/logout", (req: Request, res: Response) => {
   req.session.destroy((err: any) => {
     if (err) {
       console.error("Error destroying session:", err);
-      res.status(500).json({ message: "Error logging out" });
+      res.status(500).json({ message: false });
     } else {
-      res.json({ message: "Logged out successfully" });
-      sessionMail = "";
+      res.json({ message: true });
     }
   });
 });
@@ -161,17 +159,15 @@ app.post("/api/register", async (req: Request, res: Response) => {
       res.json({ message: "User already exists" });
       return;
     }
-
     const newUser = new User({
       id,
-      secret: temp_secret.base32,
+      secret: temp_secret.otpauth_url,
       username,
       email,
       password: hashedPassword,
     });
 
     await col.insertOne(newUser);
-    console.log("At Register: ", getDetails(req, res));
     res.json({ message: true });
   } catch (error) {
     console.error("Error generating the secret:", error);
@@ -216,21 +212,52 @@ app.post("/api/verify", async (req: Request, res: Response) => {
 });
 
 app.get("/api/fetch_login_activity", async (req: Request, res: Response) => {
-  const email = sessionMail;
-  if (email) {
-    try {
-      await client.connect();
-      const db = client.db("project");
-      const col = db.collection("users");
-
-      const user = await col.findOne({ email });
-      res.json({ user });
-    } catch (error) {
-      res.status(500).json({ message: "Something went wrong!" });
+  try {
+    if (!req.session.email) {
+      throw new Error("Email not found in session");
     }
+
+    // Connect to MongoDB
+    await client.connect();
+    const db = client.db("project");
+    const col = db.collection("users");
+
+    const user = await col.findOne({ email: req.session.email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error("Error fetching login activity:", error);
+    res.status(500).json({ message: "Error fetching login activity" });
   }
 });
 
-app.listen(port, () => {
-  console.log(`App listening at ${port}`);
+//Sending the auth url to the client for qr code generation
+app.get("/api/getcode", async (req: Request, res: Response) => {
+  try {
+    if (!req.session.email) {
+      throw new Error("Email not found in session");
+    }
+
+    // Connect to MongoDB
+    await client.connect();
+    const db = client.db("project");
+    const col = db.collection("users");
+
+    const user = await col.findOne({ email: req.session.email });
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    res.json({ user });
+  } catch (error) {
+    console.error("Error fetching login activity:", error);
+    res.status(500).json({ message: "Error fetching login activity" });
+  }
+});
+
+app.listen(process.env.PORT, () => {
+  console.log("App listening at: ", process.env.PORT);
 });

@@ -9,7 +9,6 @@ interface Props {
 }
 
 const DeviceInfo: React.FC<Props> = ({ user }) => {
-  console.log("Device info: ", Array.isArray(user));
   return (
     <>
       <div className="flex align-center justify-between flex-col shadow-md w-full h-full p-6 rounded-md">

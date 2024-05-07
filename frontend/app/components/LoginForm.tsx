@@ -21,10 +21,14 @@ export default function LoginForm(props: any) {
       isSuccess: false,
     });
     axios
-      .post("http://localhost:5000/api/login", {
-        email,
-        password,
-      })
+      .post(
+        "http://localhost:5000/api/login",
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then(function (response: any) {
         console.log(response);
         if (response.data.message == true) {
@@ -32,7 +36,7 @@ export default function LoginForm(props: any) {
             message: "Login Successful! Redirecting...",
             isSuccess: true,
           });
-          push("/home");
+          push("/auth");
         } else {
           setToast({
             message: "Invalid Credentials! Please try again.",

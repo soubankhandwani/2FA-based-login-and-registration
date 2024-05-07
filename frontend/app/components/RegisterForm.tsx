@@ -3,7 +3,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useState } from "react";
 import Loading from "./Loading";
-import SuccessToast from "./SuccessToast";
+import SuccessToast from "./Toast";
 
 export default function Register(props: any) {
   const [loading, setLoading] = useState(false);

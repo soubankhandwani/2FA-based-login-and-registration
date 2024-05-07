@@ -1,11 +1,58 @@
+"use client";
+import axios from "axios";
 import Link from "next/link";
+import { useState } from "react";
+import Loading from "./Loading";
+import SuccessToast from "./Toast";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm(props: any) {
+  const { push } = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState({ message: "", isSuccess: false });
+
   const loginUser = (event: any) => {
     event.preventDefault();
+    const email = event.target[0].value;
+    const password = event.target[1].value;
+    setLoading(true);
+    setToast({
+      message: "",
+      isSuccess: false,
+    });
+    axios
+      .post("http://localhost:5000/api/login", {
+        email,
+        password,
+      })
+      .then(function (response: any) {
+        console.log(response);
+        if (response.data.message == true) {
+          setToast({
+            message: "Login Successful! Redirecting...",
+            isSuccess: true,
+          });
+          push("/home");
+        } else {
+          setToast({
+            message: "Invalid Credentials! Please try again.",
+            isSuccess: false,
+          });
+        }
+      })
+      .catch(function (error: any) {
+        console.log(error);
+      })
+      .finally(function () {
+        setLoading(false);
+      });
   };
   return (
     <>
+      {loading && <Loading />}
+      {toast.message && (
+        <SuccessToast message={toast.message} isSuccess={toast.isSuccess} />
+      )}
       <div className="w-3/4 h-svh flex flex-col align-center justify-center mx-auto max-w-xl px-2 sm:px-6 lg:px-8">
         <p className="text-3xl font-bold text-center mb-6">Login</p>
         <form onSubmit={loginUser}>

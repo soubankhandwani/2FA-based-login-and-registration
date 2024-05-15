@@ -26,7 +26,7 @@ export default function SecretCodeForm() {
     }`;
     axios
       .post(
-        "http://localhost:5000/api/verify",
+        "https://twofa-backend-d2dn.onrender.com/api/verify",
         { token: submittedCode },
         { withCredentials: true }
       )

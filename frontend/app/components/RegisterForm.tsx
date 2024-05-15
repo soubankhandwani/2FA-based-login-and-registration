@@ -22,7 +22,7 @@ export default function Register(props: any) {
     });
     axios
       .post(
-        "http://localhost:5000/api/register",
+        "https://twofa-backend-d2dn.onrender.com/api/register",
         {
           email,
           username,

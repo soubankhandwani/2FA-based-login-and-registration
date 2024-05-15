@@ -9,9 +9,12 @@ export default function QrCode() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/getcode", {
-          withCredentials: true,
-        });
+        const response = await axios.get(
+          "https://twofa-backend-d2dn.onrender.com/api/getcode",
+          {
+            withCredentials: true,
+          }
+        );
         console.log(response.data);
         setApiString(response.data.secret);
       } catch (error) {

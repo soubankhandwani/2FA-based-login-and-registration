@@ -16,7 +16,9 @@ export default function Navbar(props: any) {
   function logoutUser() {
     setLoading(true);
     axios
-      .get("http://localhost:5000/api/logout", { withCredentials: true })
+      .get("https://twofa-backend-d2dn.onrender.com/api/logout", {
+        withCredentials: true,
+      })
       .then(function (response) {
         if (response.data.message === true) {
           router.push("/");

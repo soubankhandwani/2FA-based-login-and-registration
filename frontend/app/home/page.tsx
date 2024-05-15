@@ -14,7 +14,7 @@ export default function Home() {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/fetch_login_activity",
+          "https://twofa-backend-d2dn.onrender.com/api/fetch_login_activity",
           { withCredentials: true }
         );
         // console.log(response.data.user.login_info);

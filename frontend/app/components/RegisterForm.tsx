@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import Link from "next/link";
 import { useState } from "react";
 import Loading from "./Loading";
@@ -20,11 +21,15 @@ export default function Register(props: any) {
       isSuccess: false,
     });
     axios
-      .post("http://localhost:5000/api/register", {
-        email,
-        username,
-        password,
-      })
+      .post(
+        "http://localhost:5000/api/register",
+        {
+          email,
+          username,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then(function (response) {
         if (response.data.message === true) {
           setToast({

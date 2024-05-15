@@ -1,5 +1,6 @@
 "use client";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -8,7 +9,7 @@ export default function Navbar(props: any) {
 
   function logoutUser() {
     axios
-      .get("http://localhost:5000/api/logout")
+      .get("http://localhost:5000/api/logout", { withCredentials: true })
       .then(function (response) {
         if (response.data.message === true) {
           router.push("/");

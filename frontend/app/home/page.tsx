@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 import DeviceInfo from "../components/DeviceInfo";
 import Navbar from "../components/Navbar";
 import ShieldImage from "../../public/secure.png";

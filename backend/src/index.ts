@@ -246,12 +246,12 @@ app.get("/api/getcode", async (req: Request, res: Response) => {
     const db = client.db("project");
     const col = db.collection("users");
 
-    const user = await col.findOne({ email: req.session.email });
-    if (!user) {
+    const { secret } = await col.findOne({ email: req.session.email });
+    if (!secret) {
       throw new Error("User not found");
     }
 
-    res.json({ user });
+    res.json({ secret });
   } catch (error) {
     console.error("Error fetching login activity:", error);
     res.status(500).json({ message: "Error fetching login activity" });

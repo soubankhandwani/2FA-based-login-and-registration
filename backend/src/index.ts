@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: ["https://2fa-app-seven.vercel.app/"],
     methods: ["POST", "GET"],
     credentials: true,
   })

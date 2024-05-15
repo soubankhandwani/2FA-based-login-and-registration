@@ -20,7 +20,7 @@ app.set("view engine", "ejs");
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: true,
     methods: ["POST", "GET"],
     credentials: true,
   })

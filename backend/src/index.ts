@@ -18,7 +18,13 @@ const app: Express = express();
 const port = process.env.PORT;
 app.set("view engine", "ejs");
 app.use(express.json());
-app.use(cors({ origin: "*", methods: ["POST", "GET"], credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:3000"],
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 const client = new MongoClient(process.env.MONGO_ATLAS_URL);
 
 const mongoURI = process.env.MONGO_ATLAS_URL;

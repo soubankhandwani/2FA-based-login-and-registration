@@ -67,6 +67,10 @@ const getDetails = (req: Request, res: Response) => {
   return loginDetails;
 };
 
+app.get("/", (req: Request, res: Response) => {
+  res.json({ message: `Welcome` });
+});
+
 app.get("/home", isAuthenticated, (req: Request, res: Response) => {
   res.json({ message: `Welcome to home page: ${req.session.user}` });
 });

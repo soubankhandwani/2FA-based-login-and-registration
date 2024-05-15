@@ -22,7 +22,7 @@ export default function Register(props: any) {
     });
     axios
       .post(
-        "http://localhost:5000/api/register",
+        "https://2fa-app-backend.vercel.app//api/register",
         {
           email,
           username,

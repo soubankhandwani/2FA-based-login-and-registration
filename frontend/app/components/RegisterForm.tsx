@@ -22,11 +22,7 @@ export default function Register(props: any) {
     });
     axios
       .post(
-<<<<<<< HEAD
         "https://twofa-backend-d2dn.onrender.com/api/register",
-=======
-        "https://2fa-app-backend.vercel.app/api/register",
->>>>>>> 7229bda782188cf56f7b4349b3ed216954d05663
         {
           email,
           username,

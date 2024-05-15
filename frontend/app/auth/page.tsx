@@ -1,8 +1,5 @@
 "use client";
-import axios from "axios";
-axios.defaults.withCredentials = true;
 import Navbar from "../components/Navbar";
-import { useEffect } from "react";
 import QrCode from "../components/QrCode";
 import SecretCodeForm from "../components/SecretCodeForm";
 

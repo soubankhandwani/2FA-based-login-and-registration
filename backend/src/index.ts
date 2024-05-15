@@ -162,6 +162,7 @@ app.post("/api/register", async (req: Request, res: Response) => {
     const newUser = new User({
       id,
       secret: temp_secret.otpauth_url,
+      secret32: temp_secret.base32,
       username,
       email,
       password: hashedPassword,
@@ -188,8 +189,8 @@ app.post("/api/verify", async (req: Request, res: Response) => {
       const { token } = req.body;
       const user = await col.findOne({ email });
 
-      const secret = user.secret;
-      const verified = speakeasy.totp.verify({
+      const secret = user.secret32;
+      const verified = await speakeasy.totp.verify({
         secret,
         encoding: "base32",
         token,

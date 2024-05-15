@@ -18,7 +18,7 @@ const app: Express = express();
 const port = process.env.PORT;
 app.set("view engine", "ejs");
 app.use(express.json());
-app.use(cors({ origin: ["https://2fa-app-seven.vercel.app"], credentials: true }));
+app.use(cors({ origin: ["https://2fa-app-seven.vercel.app"],  methods: ["POST", "GET"], credentials: true }));
 const client = new MongoClient(process.env.MONGO_ATLAS_URL);
 
 const mongoURI = process.env.MONGO_ATLAS_URL;
